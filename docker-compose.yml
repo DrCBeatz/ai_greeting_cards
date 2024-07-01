@@ -1,0 +1,35 @@
+# docker-compose.yml
+
+version: "3.9"
+
+services:
+  web:
+    build: .
+    # command: python /code/manage.py runserver 0.0.0.0:8000
+    command: gunicorn core.wsgi -b 0.0.0.0:8000
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_SECURE_SSL_REDIRECT=False
+      - DJANGO_SECURE_HSTS_SECONDS=0
+      - DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=False
+      - DJANGO_SECURE_HSTS_PRELOAD=False
+      - DJANGO_SESSION_COOKIE_SECURE=False
+      - DJANGO_CSRF_COOKIE_SECURE=False
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+      - POSTGRES_HOST
+
+volumes:
+  postgres_data:
