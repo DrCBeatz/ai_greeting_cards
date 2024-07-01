@@ -36,13 +36,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          node-version: "20" # Specify Node.js 20
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          node-version: "20" # Specify Node.js 20
           python-version: "3.10"
 
       - name: Install dependencies
