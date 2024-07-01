@@ -7,6 +7,8 @@ from environs import Env
 env = Env()
 env.read_env()
 
+OPENAI_API_KEY = env('OPENAI_API_KEY')
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
@@ -28,7 +30,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
     # Local
-    "accounts.apps.AccountsConfig",
+    'accounts.apps.AccountsConfig',
+    'aigreetingcards',
 ]
 
 MIDDLEWARE = [

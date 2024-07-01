@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block content %}
+<div class="text-center">
+  <h1>Delete Image</h1>
+  <p>Are you sure you want to delete <em>{{ image.title }}?</em></p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-block btn-warning">Delete</button>
+    <a
+      href="{% url 'image_list' %}"
+      class="btn btn-block btn-light"
+      data-mdb-ripple-color="dark"
+      >Cancel</a
+    >
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+
+{% block content %}
+<div class="container text-center">
+  <h1 class="my-4">AI Art App</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <label class="form-label form-light" for="prompt" style="color: #fff"
+      >Enter description to generate image:</label
+    >
+    <div class="form-outline form-light mb-4">
+      <input
+        type="text"
+        class="form-control form-light"
+        name="prompt"
+        id="prompt"
+        style="color: #fff"
+      />
+
+      <div class="form-notch">
+        <div class="form-notch-leading"></div>
+        <div class="form-notch-middle"></div>
+        <div class="form-notch-trailing"></div>
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-light btn-block mb-4"
+      data-mdb-ripple-color="dark"
+    >
+      Submit
+    </button>
+  </form>
+  <a
+    href="{% url 'image_list' %}"
+    class="btn btn-light btn-block mb-4"
+    data-mdb-ripple-color="dark"
+    >View All Images</a
+  >
+</div>
+{% endblock %}
