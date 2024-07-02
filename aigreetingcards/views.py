@@ -4,12 +4,13 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from openai import OpenAI
 from aigreetingcards.models import Image
 
-from .models import Image, Prompt
+from .models import Image
 from accounts.models import CustomUser
 
 def user_login(request):
@@ -25,6 +26,7 @@ def user_login(request):
     context = {'form': form}
     return render(request, 'login.html', context)
 
+@login_required(login_url='login')
 def home(request):
     OPENAI_API_KEY = getattr(settings, 'OPENAI_API_KEY')
     prompt = ''
