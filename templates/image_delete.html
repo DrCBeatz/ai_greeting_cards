@@ -1,17 +1,22 @@
-{% extends 'base.html' %} {% block content %}
-<div class="text-center">
-  <h1>Delete Image</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container text-center">
+  <h1 class="my-4">Delete Image</h1>
+  <hr>
   <p>Are you sure you want to delete <em>{{ image.title }}?</em></p>
 
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-block btn-warning">Delete</button>
-    <a
-      href="{% url 'image_list' %}"
-      class="btn btn-block btn-light"
-      data-mdb-ripple-color="dark"
-      >Cancel</a
-    >
+    <div class="my-4">
+      <button type="submit" class="btn btn-block btn-light">Delete</button>
+    </div>
+    <div class="my-4">
+      <a href="{% url 'image_list' %}" class="btn btn-block btn-light" data-mdb-ripple-color="dark">Cancel</a>
+    </div>
   </form>
 </div>
+
+<script type="text/javascript" src="{% static 'js/cancel_button.js' %}"></script>
+
 {% endblock %}

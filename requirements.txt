@@ -13,3 +13,5 @@ environs[django]==9.5.0
 openai==1.35.7
 django-cleanup==8.1.0
 pillow==10.4.0
+django-crispy-forms==2.2
+crispy-bootstrap5==2024.2
