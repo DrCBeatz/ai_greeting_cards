@@ -1,3 +1,5 @@
+# aigreetingcards/models.py
+
 from django.db import models
 from django.core.files import File
 from urllib import request

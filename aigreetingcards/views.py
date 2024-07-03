@@ -1,3 +1,5 @@
+# aigreetingcards/views.py
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic.list import ListView
