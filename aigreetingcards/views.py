@@ -1,19 +1,16 @@
 # aigreetingcards/views.py
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
-from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from openai import OpenAI
 from aigreetingcards.models import Image
 
 from .models import Image
-from accounts.models import CustomUser
 from .tasks import generate_image_task
 
 def user_login(request):
@@ -38,37 +35,6 @@ def home(request):
         return HttpResponseRedirect(reverse('image_list'))
 
     return render(request, 'home.html', {'prompt': prompt})
-
-# @login_required(login_url='login')
-# def home(request):
-#     OPENAI_API_KEY = getattr(settings, 'OPENAI_API_KEY')
-#     prompt = ''
-#     img_url = ''
-#     response = ''
-#     if request.method == 'POST':
-#         prompt = request.POST.get('prompt')
-#         client=OpenAI(
-#             api_key=OPENAI_API_KEY,
-#             )
-#         response = client.images.generate(
-#           model="dall-e-3",
-#           prompt=prompt,
-#           size="1024x1024",
-#           quality="standard",
-#           n=1,
-#         )
-
-#         img_url = response.data[0].url
-
-#         # Create a new instance of the image model
-#         new_image = Image(title=prompt, image_url=img_url)
-#         new_image.get_remote_image()
-#         # Save the instance to the database
-#         new_image.user_id = request.user.id
-#         new_image.save()
-#         return HttpResponseRedirect(reverse('image_list'))
-
-#     return render(request, 'home.html', {'prompt':prompt, 'img_url':img_url, 'response':response })
 
 class ImageListView(ListView):
     model = Image
