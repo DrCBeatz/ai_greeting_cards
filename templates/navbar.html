@@ -19,6 +19,8 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'image_list' %}">All Images</a>
         </li>
+      </ul>
+      <ul class="navbar-nav me-right mb-2 mb-md-0">
         {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -28,7 +30,7 @@
           <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
         {% endif %}
-      </ul>
+    </ul>
     </div>
   </div>
 </nav>
