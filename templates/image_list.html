@@ -1,6 +1,6 @@
 <!--- image_list.html -->
-{% extends 'base.html' %} 
-
+{% extends 'base.html' %}
+{% load static %}
 {% block title %}AI Greeting Cards | All images{% endblock %}
 
 {% block content %}
@@ -9,7 +9,10 @@
         <h1 class="my-4">All images</h1>
         <a href="{% url 'home' %}" class="btn btn-light btn-block mb-4" data-mdb-ripple-color="dark">Generate Image</a>
         {% if task_id %}
-            <div id="loading-spinner">Loading...</div>
+            <div class="mb-2" id="loading-spinner" style="display: none;">
+                <img class="mb-2" src="{% static 'img/bars-rotate-fade.svg' %}" alt="Loading..." />
+                <p>Processing image...</p>
+            </div>
         {% endif %}
         
         <div id="image-list-container">
@@ -70,6 +73,7 @@
                 }
 
                 console.log('Starting task status polling for task_id:', task_id);
+                document.getElementById('loading-spinner').style.display = 'block';
                 pollingInterval = setInterval(() => checkTaskStatus(task_id), 2000);
                 pollingActive = true;
             }
