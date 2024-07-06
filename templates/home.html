@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container text-center">
   <h1 class="my-4">AI Greeting Card App</h1>
-  <form method="POST" hx-boost="false">
+  <form method="POST">
     {% csrf_token %}
     <label class="form-label form-light" for="prompt" style="color: #fff"
       >Enter description to generate image:</label
