@@ -9,7 +9,7 @@
         <h1 class="my-4">All images</h1>
         <a href="{% url 'home' %}" class="btn btn-light btn-block mb-4" data-mdb-ripple-color="dark">Generate Image</a>
         {% if task_id %}
-            <div class="mb-2" id="loading-spinner" style="display: none;">
+            <div class="hidden mb-2" id="loading-spinner">
                 <img class="mb-2" src="{% static 'img/bars-rotate-fade.svg' %}" alt="Loading..." />
                 <p>Processing image...</p>
             </div>
@@ -39,7 +39,7 @@
                         console.log('Task status response:', data);
                         if (data.status === 'completed') {
                             console.log('Image generation completed!');
-                            document.getElementById('loading-spinner').style.display = 'none';
+                            document.getElementById('loading-spinner').classList.add('hidden');
                             document.getElementById('task-status').innerText = 'Image generation completed!';
                             htmx.ajax('GET', '/images/refresh/', '#image-list-container').then(function() {
                                 console.log('Image list refreshed');
@@ -51,7 +51,7 @@
                             });
                         } else if (data.status.startsWith('failed')) {
                             console.log('Image generation failed:', data.status);
-                            document.getElementById('loading-spinner').style.display = 'none';
+                            document.getElementById('loading-spinner').classList.add('hidden');
                             document.getElementById('task-status').innerText = data.status;
                             clearInterval(pollingInterval);  // Stop polling
                             pollingInterval = null;
@@ -73,7 +73,7 @@
                 }
 
                 console.log('Starting task status polling for task_id:', task_id);
-                document.getElementById('loading-spinner').style.display = 'block';
+                document.getElementById('loading-spinner').classList.remove('hidden');
                 pollingInterval = setInterval(() => checkTaskStatus(task_id), 2000);
                 pollingActive = true;
             }
