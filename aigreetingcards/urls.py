@@ -9,12 +9,16 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('images/', views.ImageListView.as_view(), name='image_list'),
-    path('images/refresh/', views.ImageListRefreshView.as_view(), name='image_list_refresh'),
-    path('images/<int:pk>/delete/', views.ImageDeleteView.as_view(), name='image_delete'),
-    path('check-task-status/<str:task_id>/', views.check_task_status, name='check_task_status'),
+    
     path('login/', views.user_login, name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='image_list'), name='logout'),
+    
+    path('images/', views.ImageListView.as_view(), name='image_list'),
+    path('images/refresh/', views.ImageListRefreshView.as_view(), name='image_list_refresh'),
+    path('images/<int:pk>/', views.ImageDetailView.as_view(), name='image_detail'),
+    path('images/<int:pk>/delete/', views.ImageDeleteView.as_view(), name='image_delete'),
+    
+    path('check-task-status/<str:task_id>/', views.check_task_status, name='check_task_status'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

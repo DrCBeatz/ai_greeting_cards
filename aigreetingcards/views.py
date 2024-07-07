@@ -4,6 +4,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
+from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect, JsonResponse
@@ -12,7 +14,6 @@ from aigreetingcards.models import Image
 from .models import Image
 from .tasks import generate_image_task
 import redis
-from django.views.generic.base import TemplateView
 
 
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
@@ -61,6 +62,11 @@ class ImageListView(ListView):
         task_id = self.request.GET.get("task_id")
         context['task_id'] = task_id
         return context
+
+class ImageDetailView(DetailView):
+    template_name = 'image_detail.html'
+    model = Image
+    model_name = 'image'
 
 class ImageDeleteView(DeleteView):
     model = Image

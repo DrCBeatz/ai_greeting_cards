@@ -5,7 +5,7 @@
         <div class="card mb-4">
             <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
                 <img src="/media/{{ image.image_file }}" alt="{{ image.title }}" class="card-img-top" />
-                <a hx-boost="false" href="/media/{{ image.image_file }}" download="{{ image.image_file }}.png">
+                <a href="{% url 'image_detail' image.id %}">
                     <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
                 </a>
             </div>
