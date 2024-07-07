@@ -43,7 +43,8 @@ def home(request):
     prompt = ''
     if request.method == 'POST':
         prompt = request.POST.get('prompt')
-        task = generate_image_task.delay(prompt, request.user.id)
+        size = request.POST.get('size')
+        task = generate_image_task.delay(prompt, size, request.user.id)
         return HttpResponseRedirect(reverse('image_list') + f"?task_id={task.id}")
         
     return render(request, 'home.html', {'prompt': prompt})
