@@ -1,18 +1,23 @@
-{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
-<div class="container">
-  <h1 class="my-4 text-center">Login</h1>
-  <hr class="mb-4" />
-  <form method="post">
-    {% csrf_token %} {{ form|crispy }}
-    <div class="mt-5">
-      <button
-        type="submit"
-        class="btn btn-light btn-block"
-        data-mdb-ripple-color="dark"
-      >
-        Login
-      </button>
-    </div>
-  </form>
-</div>
+<!-- templates/login.html -->
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %} 
+
+{% block content %}
+  <div class="container">
+    <h1 class="my-4 text-center">Login</h1>
+    <hr class="mb-4" />
+    <form method="post">
+      {% csrf_token %} 
+      {{ form|crispy }}
+      <div class="mt-5">
+        <button
+          type="submit"
+          class="btn btn-light btn-block"
+          data-mdb-ripple-color="dark"
+        >
+          Login
+        </button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
