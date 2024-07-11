@@ -17,6 +17,7 @@ urlpatterns = [
     path('images/refresh/', views.ImageListRefreshView.as_view(), name='image_list_refresh'),
     path('images/<int:pk>/', views.ImageDetailView.as_view(), name='image_detail'),
     path('images/<int:pk>/delete/', views.ImageDeleteView.as_view(), name='image_delete'),
+    path('my-images/', views.ImageUserListView.as_view(), name='image_user_list'),
     
     path('check-task-status/<str:task_id>/', views.check_task_status, name='check_task_status'),
 ]

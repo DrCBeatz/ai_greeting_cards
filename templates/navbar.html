@@ -20,6 +20,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'image_list' %}">All Images</a>
         </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'image_user_list' %}">My Images</a>
+        </li>
+        {% endif %}
       </ul>
       <ul class="navbar-nav me-right mb-2 mb-md-0">
         {% if user.is_authenticated %}

@@ -1,0 +1,16 @@
+<!-- templates/image_user_list.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Images{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+    <div class="row d-flex justify-content-center">
+        <h1 class="my-4">My Images</h1>
+        <a href="{% url 'home' %}" class="btn btn-light btn-block mb-4" data-mdb-ripple-color="dark">Generate Image</a>
+        <div id="image-user-list-container">
+            {% include 'partials/image_user_list_content.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

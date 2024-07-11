@@ -14,6 +14,7 @@ from aigreetingcards.models import Image
 from .models import Image
 from .tasks import generate_image_task
 import redis
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
@@ -81,3 +82,11 @@ class ImageListRefreshView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['object_list'] = Image.objects.order_by("-id")
         return context
+
+class ImageUserListView(LoginRequiredMixin, ListView):
+    model = Image
+    template_name = 'image_user_list.html'
+    context_object_name = 'images'
+
+    def get_queryset(self):
+        return Image.objects.filter(user=self.request.user).order_by('-id')
