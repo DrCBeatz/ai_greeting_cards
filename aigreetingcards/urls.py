@@ -18,6 +18,8 @@ urlpatterns = [
     path('images/<int:pk>/', views.ImageDetailView.as_view(), name='image_detail'),
     path('images/<int:pk>/delete/', views.ImageDeleteView.as_view(), name='image_delete'),
     path('my-images/', views.ImageUserListView.as_view(), name='image_user_list'),
+
+    path('image/<int:pk>/send-email/', views.send_image_email, name='send_image_email'),
     
     path('check-task-status/<str:task_id>/', views.check_task_status, name='check_task_status'),
 ]

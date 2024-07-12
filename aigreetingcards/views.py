@@ -1,12 +1,13 @@
 # aigreetingcards/views.py
 
+from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -15,7 +16,9 @@ from .models import Image
 from .tasks import generate_image_task
 import redis
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.core.mail import send_mail
+from .forms import EmailImageForm
+import requests
 
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 
@@ -90,3 +93,32 @@ class ImageUserListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Image.objects.filter(user=self.request.user).order_by('-id')
+
+def send_image_email(request, pk):
+    image = get_object_or_404(Image, pk=pk)
+    if request.method == 'POST':
+        form = EmailImageForm(request.POST)
+        if form.is_valid():
+            recipient_email = form.cleaned_data['recipient_email']
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            image_url = request.build_absolute_uri(image.image_url)
+            email_body = f"{message}\n\nView the image: {image_url}"
+            email_html = f"<p>{message}</p><p><a href='{image_url}'>View the image</a></p>"
+
+            # Send email using SMTP
+            try:
+                send_mail(
+                    subject,
+                    email_body,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [recipient_email],
+                    html_message=email_html
+                )
+                return redirect(reverse('image_detail', args=[pk]))
+            except Exception as e:
+                form.add_error(None, f"Failed to send email: {str(e)}")
+    else:
+        form = EmailImageForm()
+    
+    return render(request, 'send_image_email.html', {'form': form, 'image': image})

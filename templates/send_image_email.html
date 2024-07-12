@@ -1,0 +1,14 @@
+<!-- templates/send_image_email.html -->
+ {% extends 'base.html' %}
+ {% block content %}
+ <div class="container text-center">
+    <h2>Sened Image as Email</h2>
+    <img src="{{ image.image_url }}" alt="Generated image" class="img-fluid mt-4 mb-4 rounded ripple" />
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button typ="submit" class="btn btn-primary">Send Email</button>
+    </form>
+    <a href="{% url 'image_detail' image.pk %}" class="btn btn-secondary mt-3">Back to Image</a>
+</div>
+{% endblock %}

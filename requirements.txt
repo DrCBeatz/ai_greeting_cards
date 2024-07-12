@@ -21,3 +21,4 @@ celery==5.4.0
 django-celery-results==2.5.1
 redis==4.5.1  
 django-imagekit==5.0.0
+requests==2.32.3

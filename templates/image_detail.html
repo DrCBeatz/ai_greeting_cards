@@ -15,6 +15,9 @@
         <div class="my-4">
             <a href="{% url 'image_list' %}" class="btn btn-light btn-block mb-4" data-mdb-ripple-color="dark">Back to Image List</a>
         </div>
+        <div class="my-4">
+            <a href="{% url 'send_image_email' image.pk %}" class="btn btn-light btn-block mb-4">Email this Image</a>
+        </div>
     </div>
 </div>
 
