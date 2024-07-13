@@ -102,9 +102,9 @@ def send_image_email(request, pk):
             recipient_email = form.cleaned_data['recipient_email']
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
-            image_url = request.build_absolute_uri(image.image_url)
+            image_url = request.build_absolute_uri(image.thumbnail.url)
             email_body = f"{message}\n\nView the image: {image_url}"
-            email_html = f"<p>{message}</p><p><a href='{image_url}'>View the image</a></p>"
+            email_html = f"<p>{message}</p><p><img src='{image_url}'></p>"
 
             # Send email using SMTP
             try:
