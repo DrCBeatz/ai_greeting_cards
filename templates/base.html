@@ -32,7 +32,17 @@
   </head>
   <body hx-boost="true">
     {% include 'navbar.html' %}
-
+    {% block messages %}
+      {% if messages %}
+        {% for msg in messages %}
+        <div class="alert alert-{% if msg.level_tag == 'error' %}danger{% else %}{{msg.level_tag}}{% endif %}"
+                    role="alert">
+                    {% if msg.level_tag == "error" %}<i class="fas fa-times-circle me-3"></i>{% else %}<i
+                        class="fas fa-check-circle me-1"></i>{% endif %}{{msg.message}}
+                </div>
+        {% endfor %}
+      {% endif %}
+    {% endblock %}
     <main>{% block content %} {% endblock %}</main>
 
     <footer></footer>

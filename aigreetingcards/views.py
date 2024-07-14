@@ -3,10 +3,12 @@
 from django.conf import settings
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
-from django.views.generic.list import ListView
-from django.views.generic.edit import DeleteView
-from django.views.generic.base import TemplateView
-from django.views.generic.detail import DetailView
+from django.views.generic import (
+    ListView, 
+    DetailView, 
+    DeleteView,
+    TemplateView
+)
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect, JsonResponse
@@ -19,6 +21,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from .forms import EmailImageForm
 import requests
+from django.contrib import messages
+
 
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 
@@ -115,9 +119,12 @@ def send_image_email(request, pk):
                     [recipient_email],
                     html_message=email_html
                 )
+                messages.success(request, "Email sent successfully")
                 return redirect(reverse('image_detail', args=[pk]))
             except Exception as e:
                 form.add_error(None, f"Failed to send email: {str(e)}")
+                messages.error(request, "Failed to send email")
+
     else:
         form = EmailImageForm()
     
