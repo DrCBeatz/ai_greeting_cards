@@ -21,12 +21,12 @@ def user_login(request):
         form = AuthenticationForm(request)
 
     context = {'form': form}
-    return render(request, 'login.html', context)
+    return render(request, 'registration/login.html', context)
 
 class SignupPageView(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
-    template_name = "signup.html"
+    template_name = "registration/signup.html"
 
     def form_valid(self, form):
         response = super().form_valid(form)
