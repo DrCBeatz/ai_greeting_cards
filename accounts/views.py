@@ -6,8 +6,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib import messages
 from .forms import CustomUserCreationForm
 
 def user_login(request):
@@ -31,3 +31,9 @@ class SignupPageView(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "signup.html"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        username = form.cleaned_data.get('username')
+        messages.success(self.request, f'Account {username} successfully created')
+        return response
