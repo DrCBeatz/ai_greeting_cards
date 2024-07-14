@@ -6,6 +6,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.urls import reverse_lazy
+from django.views import generic
+from .forms import CustomUserCreationForm
 
 def user_login(request):
     if request.method == 'POST':
@@ -23,3 +26,8 @@ def user_login(request):
 def custom_logout_view(request):
     logout(request)
     return redirect('image_list')
+
+class SignupPageView(generic.CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "signup.html"

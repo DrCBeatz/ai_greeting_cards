@@ -103,6 +103,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='webmaster@localhost.com')
 
+
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
