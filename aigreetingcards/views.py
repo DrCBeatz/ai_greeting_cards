@@ -33,19 +33,6 @@ def check_task_status(request, task_id):
         return JsonResponse({'status': status.decode('utf-8')})
     return JsonResponse({'status': 'unknown'})
 
-def user_login(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return HttpResponseRedirect(reverse_lazy('image_list'))
-    else:
-        form = AuthenticationForm(request)
-
-    context = {'form': form}
-    return render(request, 'login.html', context)
-
 @login_required(login_url='login')
 def home(request):
     prompt = ''
