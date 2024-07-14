@@ -120,6 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGOUT_REDIRECT_URL = 'image_list'
+
 # Custom user model
 AUTH_USER_MODEL = "accounts.CustomUser"
 

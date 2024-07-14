@@ -23,10 +23,6 @@ def user_login(request):
     context = {'form': form}
     return render(request, 'login.html', context)
 
-def custom_logout_view(request):
-    logout(request)
-    return redirect('image_list')
-
 class SignupPageView(generic.CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
