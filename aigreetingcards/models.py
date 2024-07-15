@@ -16,7 +16,6 @@ class Image(models.Model):
     thumbnail = ImageSpecField(source='image_file', id='aigreetingcards:image_file:image_file_thumbnail', processors=[Transpose(),ResizeToFill(650, 650)], format='JPEG', options={'quality':100})
     title = models.CharField(max_length=500, null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-    test = models.BooleanField(default=False)
 
     def get_remote_image(self):
         if self.image_url and not self.image_file:
