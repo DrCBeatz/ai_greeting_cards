@@ -1,5 +1,6 @@
 <!-- templates/send_image_email.html -->
  {% extends 'base.html' %}
+ {% load static %}
  {% load crispy_forms_tags %}
  {% block content %}
  <div class="container">
@@ -7,7 +8,7 @@
         <h2 class="mt-3">Send Image as Email</h2>
         <img src="{{image.thumbnail.url}}" alt="Generated image" class="img-fluid mt-4 mb-4 rounded ripple text-center" />
     </div>
-    <form method="post">
+    <form method="post" hx-indicator="#indicator">
         {% csrf_token %}
         {{ form | crispy }}
         <div class="my-4">
@@ -15,7 +16,10 @@
         </div>
     </form>
     <div class="mb-3">
-        <a href="{% url 'image_detail' image.pk %}" class="btn btn-light btn-block">Back to Image</a>
+        <a hx-indicator="#indicator" href="{% url 'image_detail' image.pk %}" class="btn btn-light btn-block">Back to Image</a>
+    </div>
+    <div class="text-center my-3">
+        <img id="indicator" class="htmx-indicator" src="{% static 'img/bars-rotate-fade.svg' %}" alt="Sending email..."/>
     </div>
 </div>
 {% endblock %}

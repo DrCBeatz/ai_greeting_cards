@@ -1,7 +1,7 @@
 <!--- templates/navbar.html -->
 {% load static %}
 
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<nav class="navbar navbar-expand-md navbar-light bg-light bg-gradient">
   <div class="container-fluid">
     <button
       class="navbar-toggler"
@@ -29,7 +29,7 @@
       <ul class="navbar-nav me-right mb-2 mb-md-0">
         {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link disabled">{{user.username}}</a>
+          <a class="nav-link disabled text-muted">{{user.username}}</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
