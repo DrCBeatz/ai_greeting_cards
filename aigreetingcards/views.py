@@ -1,17 +1,14 @@
 # aigreetingcards/views.py
 
 from django.conf import settings
-from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import (
     ListView, 
     DetailView, 
     DeleteView,
-    TemplateView
 )
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from aigreetingcards.models import Image
 from .models import Image
@@ -20,9 +17,9 @@ import redis
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from .forms import EmailImageForm
-import requests
 from django.contrib import messages
-
+from django.template.loader import render_to_string
+from django.http import JsonResponse
 
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 
@@ -46,19 +43,38 @@ def home(request):
 
 class ImageListView(ListView):
     model = Image
-    template_name = 'image_list.html'
+    context_object_name = 'images'
+    paginate_by = 6
 
-    def get_queryset(self, *args, **kwargs):
-        qs = super(ImageListView, self).get_queryset(*args, **kwargs)
-        qs = qs.order_by("-id")
-        return qs
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['partials/image_list_content.html']
+        return ['image_list.html']
     
+    def get_queryset(self):
+        return Image.objects.order_by('-id')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         task_id = self.request.GET.get("task_id")
         context['task_id'] = task_id
         return context
+    
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get('HX-Request'):
+            html = render_to_string(self.get_template_names(), context, request=self.request)
+            return HttpResponse(html)
+        return super().render_to_response(context, **response_kwargs)
+        
+class ImageListRefreshView(ListView):
+    model = Image
+    template_name = 'partials/image_list_content.html'
+    context_object_name = 'images'
+    paginate_by = 10
 
+    def get_queryset(self):
+        return Image.objects.order_by('-id')
+    
 class ImageDetailView(DetailView):
     template_name = 'image_detail.html'
     model = Image
@@ -68,14 +84,6 @@ class ImageDeleteView(DeleteView):
     model = Image
     template_name = 'image_delete.html'
     success_url = reverse_lazy('image_list')
-
-class ImageListRefreshView(TemplateView):
-    template_name = 'partials/image_list_content.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object_list'] = Image.objects.order_by("-id")
-        return context
 
 class ImageUserListView(LoginRequiredMixin, ListView):
     model = Image

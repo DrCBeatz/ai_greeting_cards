@@ -1,4 +1,3 @@
-<!--- templates/image_list.html -->
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}AI Greeting Cards | All images{% endblock %}
@@ -15,10 +14,12 @@
             </div>
         {% endif %}
         
-        <div id="image-list-container">
+        <div id="image-list-container" hx-boost="true" class="row d-flex justify-content-center">
             {% include 'partials/image_list_content.html' %}
         </div>
+
     </div>
+    
     {% if task_id %}
         <div id="task-status"></div>
         <script>
@@ -40,7 +41,6 @@
                         if (data.status === 'completed') {
                             console.log('Image generation completed!');
                             document.getElementById('loading-spinner').classList.add('hidden');
-                            document.getElementById('task-status').innerText = 'Image generation completed!';
                             htmx.ajax('GET', '/images/refresh/', '#image-list-container').then(function() {
                                 console.log('Image list refreshed');
                                 clearInterval(pollingInterval);  // Stop polling
