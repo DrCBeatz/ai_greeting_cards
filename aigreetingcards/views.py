@@ -23,6 +23,8 @@ from django.http import JsonResponse
 
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 
+PAGINATION_AMOUNT = 6
+
 @login_required(login_url='login')
 def check_task_status(request, task_id):
     status = redis_client.get(f"task_status:{task_id}")
@@ -44,7 +46,7 @@ def home(request):
 class ImageListView(ListView):
     model = Image
     context_object_name = 'images'
-    paginate_by = 6
+    paginate_by = PAGINATION_AMOUNT
 
     def get_template_names(self):
         if self.request.headers.get('HX-Request'):
@@ -70,7 +72,7 @@ class ImageListRefreshView(ListView):
     model = Image
     template_name = 'partials/image_list_content.html'
     context_object_name = 'images'
-    paginate_by = 6
+    paginate_by = PAGINATION_AMOUNT
 
     def get_queryset(self):
         return Image.objects.order_by('-id')
@@ -87,8 +89,28 @@ class ImageDeleteView(DeleteView):
 
 class ImageUserListView(LoginRequiredMixin, ListView):
     model = Image
-    template_name = 'image_user_list.html'
     context_object_name = 'images'
+    paginate_by = PAGINATION_AMOUNT
+
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['partials/image_user_list_content.html']
+        return ['image_user_list.html']
+
+    def get_queryset(self):
+        return Image.objects.filter(user=self.request.user).order_by('-id')
+    
+    def render_to_response(self, context, **response_kwargs):
+        if self.request.headers.get('HX-Request'):
+            html = render_to_string(self.get_template_names(), context, request=self.request)
+            return HttpResponse(html)
+        return super().render_to_response(context, **response_kwargs)
+
+class ImageUserListRefreshView(LoginRequiredMixin, ListView):
+    model = Image
+    template_name = 'partials/image_user_list_content.html'
+    context_object_name = 'images'
+    paginate_by = PAGINATION_AMOUNT
 
     def get_queryset(self):
         return Image.objects.filter(user=self.request.user).order_by('-id')
