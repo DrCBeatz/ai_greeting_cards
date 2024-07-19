@@ -70,7 +70,7 @@ class ImageListRefreshView(ListView):
     model = Image
     template_name = 'partials/image_list_content.html'
     context_object_name = 'images'
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         return Image.objects.order_by('-id')
