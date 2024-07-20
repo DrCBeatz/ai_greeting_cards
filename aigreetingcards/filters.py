@@ -1,3 +1,5 @@
+# aigreetingcards/filters.py
+
 import django_filters
 from .models import Image
 from django.utils.translation import gettext as _
