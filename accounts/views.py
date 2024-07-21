@@ -1,7 +1,5 @@
 # accounts/views.py
 
-from django.contrib.auth import logout
-from django.shortcuts import redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
 from django.shortcuts import render, HttpResponseRedirect
