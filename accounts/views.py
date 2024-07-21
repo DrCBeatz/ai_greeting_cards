@@ -2,11 +2,12 @@
 
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
-from django.shortcuts import render, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.contrib import messages
 from .forms import CustomUserCreationForm
+from django.contrib.auth.decorators import login_required
 
 def user_login(request):
     if request.method == 'POST':
@@ -31,3 +32,10 @@ class SignupPageView(generic.CreateView):
         username = form.cleaned_data.get('username')
         messages.success(self.request, f'Account {username} successfully created')
         return response
+
+@login_required(login_url='login')
+def add_credits(request, amount):
+    request.user.credits += amount
+    request.user.save()
+    messages.success(request, f'{amount} credits added successfully.')
+    return redirect(reverse('image_list'))

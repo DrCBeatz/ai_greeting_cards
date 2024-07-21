@@ -36,11 +36,17 @@ def check_task_status(request, task_id):
 def home(request):
     prompt = ''
     if request.method == 'POST':
-        prompt = request.POST.get('prompt')
-        size = request.POST.get('size')
-        task = generate_image_task.delay(prompt, size, request.user.id)
-        return HttpResponseRedirect(reverse('image_list') + f"?task_id={task.id}")
-        
+        if request.user.credits >= 10:
+            prompt = request.POST.get('prompt')
+            size = request.POST.get('size')
+            request.user.credits -= 10
+            request.user.save()
+            task = generate_image_task.delay(prompt, size, request.user.id)
+            return HttpResponseRedirect(reverse('image_list') + f"?task_id={task.id}")
+        else:
+            messages.error(request, 'Insufficient credits to generate an image.')
+            return redirect('home')
+            
     return render(request, 'home.html', {'prompt': prompt})
 
 class ImageListView(ListView):
