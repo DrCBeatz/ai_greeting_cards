@@ -1,4 +1,4 @@
-# products/views.py
+# payments/views.py
 
 import stripe
 from django.conf import settings
