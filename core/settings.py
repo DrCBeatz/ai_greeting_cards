@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Local apps
     'accounts.apps.AccountsConfig',
     'aigreetingcards',
+    'payments',
     # Celery result backend
     'django_celery_results',
 ]
@@ -147,6 +148,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Crispy forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+# Links for Payments app
+BACKEND_DOMAIN = env("BACKEND_DOMAIN")
+PAYMENT_SUCCESS_URL = env("PAYMENT_SUCCESS_URL")
+PAYMENT_CANCEL_URL = env("PAYMENT_CANCEL_URL")
+
+# Stripe
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 
 # Security settings for production
 SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)

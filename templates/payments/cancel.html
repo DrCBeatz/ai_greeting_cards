@@ -1,0 +1,13 @@
+<!--- templates/products/cancel.html -->
+
+{% extends "base.html" %} 
+{% block title %} Cancel {% endblock title%} 
+{% block content %}
+<div class="alert alert-info" role="alert">
+  Forgot to add something to your cart?
+  <a
+      href="{% url 'home' %}"
+      >Generate Image</a
+    >
+</div>
+{% endblock content %}

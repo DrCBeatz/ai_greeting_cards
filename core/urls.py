@@ -7,5 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('aigreetingcards.urls')),
     path("accounts/", include("accounts.urls")),
+    path("payments/", include("payments.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
 ]

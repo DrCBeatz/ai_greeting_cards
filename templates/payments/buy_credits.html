@@ -1,0 +1,25 @@
+<!-- templates/payments/buy_credits.html {% endcomment -->
+
+{% extends "base.html" %} 
+{% block title %} Buy Credits {% endblock title%} 
+{% block head %}<script defer src="https://js.stripe.com/v3/"></script>{% endblock head %}
+{% block content %}
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">20 Credits</h5>
+      <p class="card-text">Credits for Image Generation</p>
+      <div class="card-text">
+        <h5 class="card-text">$5</h5>
+        <form
+          action="{% url 'create-checkout-session' %}"
+          method="POST"
+        >
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary">Checkout</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %} 
