@@ -5,18 +5,27 @@
 {% block head %}<script defer src="https://js.stripe.com/v3/"></script>{% endblock head %}
 {% block content %}
 <div class="container">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">20 Credits</h5>
-      <p class="card-text">Credits for Image Generation</p>
+  <div class="card text-center mt-5">
+    <div class="card-body ">
+      <h1 class="card-title mb-4">Buy Credits For Image Generation</h1>
+      <hr>
       <div class="card-text">
-        <h5 class="card-text">$5</h5>
+        <h3 class="card-text">$0.50 for 10 credits (1 image)</h3>
         <form
+          class="my-4"
           action="{% url 'create-checkout-session' %}"
           method="POST"
         >
           {% csrf_token %}
-          <button type="submit" class="btn btn-primary">Checkout</button>
+          <label class="mb-2" for="credits">Select Credits:</label>
+          <select class="form-control mb-4" name="credits" id="credits" >
+            <option value="10">10 Credits ($0.50)</option>
+            <option value="20">20 Credits ($1.00)</option>
+            <option value="30">30 Credits ($1.50)</option>
+            <option value="40">40 Credits ($2.00)</option>
+            <option value="50">50 Credits ($2.50)</option>
+          </select>
+          <button type="submit" class="btn btn-light btn-block">Checkout</button>
         </form>
       </div>
     </div>

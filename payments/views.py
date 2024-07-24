@@ -6,13 +6,15 @@ from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import TemplateView
 
-PRICE = 5 # $5 for 20 Images or 200 Credits
+PRICE_PER_CREDIT = 0.50 # $0.50 for 10 credits
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class CreateStripeCheckoutSessionView(View):
 
     def post(self, request, *args, **kwargs):
+        credits = int(request.POST.get("credits", 10)) # Default to 10 credits
+        price_in_cents = int(PRICE_PER_CREDIT * credits * 10)
 
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=["card"],
@@ -20,10 +22,10 @@ class CreateStripeCheckoutSessionView(View):
                 {
                     "price_data": {
                         "currency": "cad",
-                        "unit_amount": int(PRICE) * 100,
+                        "unit_amount": price_in_cents,
                         "product_data": {
-                            "name": "Credits",
-                            "description": "200 Credits for AI Greeting Cards App",
+                            "name": f"{credits} Credits",
+                            "description": "Credits for AI Greeting Cards App",
                         },
                     },
                     "quantity": "1",
