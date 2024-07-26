@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
-
+from django.core.mail import send_mail
 
 PRICE_PER_CREDIT = 0.50 # $0.50 for 10 credits
 
@@ -86,7 +86,16 @@ class StripeWebhookView(View):
             # Update the user's credits
             user.credits += credits_to_add
             user.save()
+
+            session = event["data"]["object"]
+            customer_email = session["customer_details"]["email"]
+
+            send_mail(
+                subject=f"Thank you {user.username} for your purchase!",
+                message=f"Thanks for purchasing {credits_to_add} credits for aigreetingcards.com.",
+                recipient_list=[customer_email],
+                from_email="noreply@aigreetingcards.com",
+            )
             
-            print(f"Payment successful. Added {credits_to_add} credits to user ID {user_id}")
         
         return HttpResponse(status=200)
