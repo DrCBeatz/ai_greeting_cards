@@ -43,6 +43,7 @@ jobs:
       BACKEND_DOMAIN: ${{secrets.BACKEND_DOMAIN}}
       PAYMENT_SUCCESS_URL: ${{secrets.PAYMENT_SUCCESS_URL}}
       PAYMENT_CANCEL_URL: ${{secrets.PAYMENT_CANCEL_URL}}
+      PAYMENT_WEBHOOK_URL: ${{secrets.PAYMENT_WEBHOOK_URL}}
 
     steps:
       - name: Checkout code

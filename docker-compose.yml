@@ -28,6 +28,7 @@ services:
       - BACKEND_DOMAIN=${BACKEND_DOMAIN}
       - PAYMENT_SUCCESS_URL=${PAYMENT_SUCCESS_URL}
       - PAYMENT_CANCEL_URL=${PAYMENT_CANCEL_URL}
+      - PAYMENT_WEBHOOK_URL=${PAYMENT_WEBHOOK_URL}
     volumes:
       - .:/code
     ports:
