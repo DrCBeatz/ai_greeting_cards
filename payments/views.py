@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
+from .models import Payment
 
 PRICE_PER_CREDIT = 0.50 # $0.50 for 10 credits
 
@@ -58,7 +59,6 @@ class BuyCreditsView(TemplateView):
 
 @method_decorator(csrf_exempt, name="dispatch")
 class StripeWebhookView(View):
-
     def post(self, request, format=None):
         payload = request.body
         endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
@@ -73,21 +73,31 @@ class StripeWebhookView(View):
         except stripe.error.SignatureVerificationError as e:
             # Invalid signature
             return HttpResponse(status=400)
-        
+
         if event["type"] == "checkout.session.completed":
             session = event['data']['object']
             user_id = session["metadata"]["user_id"]
-            amount_total = session["amount_total"]
+            amount_total = session["amount_total"] 
+            currency = session["currency"].upper()
             user = User.objects.get(id=user_id)
 
             # Calculate the number of credits
-            credits_to_add = int(amount_total / (PRICE_PER_CREDIT * 10))  # amount_total is in cents
+            credits_to_add = int(amount_total / (PRICE_PER_CREDIT * 10))
 
             # Update the user's credits
             user.credits += credits_to_add
             user.save()
 
-            session = event["data"]["object"]
+            # Save payment details
+            Payment.objects.create(
+                user=user,
+                amount=amount_total / 100,
+                currency=currency,
+                stripe_payment_intent_id=session.get('payment_intent'),
+                stripe_checkout_session_id=session.get('id'),
+                billing_address=session.get('customer_details', {}).get('address', {})
+            )
+
             customer_email = session["customer_details"]["email"]
 
             send_mail(
@@ -96,6 +106,5 @@ class StripeWebhookView(View):
                 recipient_list=[customer_email],
                 from_email="noreply@aigreetingcards.com",
             )
-            
-        
+
         return HttpResponse(status=200)
