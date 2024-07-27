@@ -77,7 +77,7 @@ class StripeWebhookView(View):
         if event["type"] == "checkout.session.completed":
             session = event['data']['object']
             user_id = session["metadata"]["user_id"]
-            amount_total = session["amount_total"] 
+            amount_total = session["amount_total"] / 100
             currency = session["currency"].upper()
             user = User.objects.get(id=user_id)
 
@@ -88,14 +88,23 @@ class StripeWebhookView(View):
             user.credits += credits_to_add
             user.save()
 
+            # Extract card details
+            payment_intent_id = session.get('payment_intent')
+            payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
+            payment_method = stripe.PaymentMethod.retrieve(payment_intent.payment_method)
+
+
             # Save payment details
             Payment.objects.create(
                 user=user,
-                amount=amount_total / 100,
+                amount=amount_total,
                 currency=currency,
-                stripe_payment_intent_id=session.get('payment_intent'),
+                stripe_payment_intent_id=payment_intent_id,
                 stripe_checkout_session_id=session.get('id'),
-                billing_address=session.get('customer_details', {}).get('address', {})
+                billing_address=session.get('customer_details', {}).get('address', {}),
+                cardholder_email=payment_method.billing_details.email,
+                cardholder_name=payment_method.billing_details.name,
+                card_last4=payment_method.card.last4
             )
 
             customer_email = session["customer_details"]["email"]

@@ -10,6 +10,9 @@ class Payment(models.Model):
     stripe_payment_intent_id = models.CharField(max_length=255, blank=True, null=True)
     stripe_checkout_session_id = models.CharField(max_length=255, blank=True, null=True)
     billing_address = models.TextField(blank=True, null=True)
+    cardholder_email = models.EmailField(blank=True, null=True)
+    cardholder_name = models.CharField(max_length=255, blank=True, null=True)
+    card_last4 = models.CharField(max_length=4, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
