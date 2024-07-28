@@ -82,7 +82,7 @@ class StripeWebhookView(View):
             user = User.objects.get(id=user_id)
 
             # Calculate the number of credits
-            credits_to_add = int(amount_total / (PRICE_PER_CREDIT * 10))
+            credits_to_add = int(amount_total / PRICE_PER_CREDIT * 10)
 
             # Update the user's credits
             user.credits += credits_to_add
@@ -93,6 +93,7 @@ class StripeWebhookView(View):
             payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id)
             payment_method = stripe.PaymentMethod.retrieve(payment_intent.payment_method)
 
+            address = session.get('customer_details', {}).get('address', {})
 
             # Save payment details
             Payment.objects.create(
@@ -101,7 +102,8 @@ class StripeWebhookView(View):
                 currency=currency,
                 stripe_payment_intent_id=payment_intent_id,
                 stripe_checkout_session_id=session.get('id'),
-                billing_address=session.get('customer_details', {}).get('address', {}),
+                country=address.get('country'),
+                postal_code=address.get('postal_code'),
                 cardholder_email=payment_method.billing_details.email,
                 cardholder_name=payment_method.billing_details.name,
                 card_last4=payment_method.card.last4
