@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from .models import Payment
+from django.template.loader import render_to_string
 
 PRICE_PER_10_CREDITS = 0.50 # $0.50 for 10 credits
 
@@ -96,7 +97,7 @@ class StripeWebhookView(View):
             address = session.get('customer_details', {}).get('address', {})
 
             # Save payment details
-            Payment.objects.create(
+            payment = Payment.objects.create(
                 user=user,
                 amount=amount_total,
                 currency=currency,
@@ -112,11 +113,19 @@ class StripeWebhookView(View):
 
             customer_email = session["customer_details"]["email"]
 
+            email_subject = f"Thank you {user.username} for your purchase!"
+            email_message = render_to_string('payments/payment_email.html', {
+                'user': user,
+                'payment': payment,
+                'credits_to_add': credits_to_add,
+            } )
+
             send_mail(
-                subject=f"Thank you {user.username} for your purchase!",
-                message=f"Thanks for purchasing {credits_to_add} credits for aigreetingcards.com.",
-                recipient_list=[customer_email],
+                subject=email_subject,
+                message=email_message,
                 from_email="noreply@aigreetingcards.com",
+                recipient_list=[customer_email],
             )
+            print("Email sent successfully")
 
         return HttpResponse(status=200)

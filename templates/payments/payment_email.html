@@ -1,0 +1,12 @@
+Thank you {{ user.username }} for your purchase!
+Here are the details of your payment:
+
+    Amount: ${{ payment.amount|floatformat:2 }} {{ payment.currency }}
+    Country: {{ payment.country }}
+    Postal Code: {{ payment.postal_code }}
+    Cardholder Name: {{ payment.cardholder_name }}
+    Cardholder Email: {{ payment.cardholder_email }}
+    Card Last 4 Digits: **** **** **** {{ payment.card_last4 }}
+
+You have received {{ credits_to_add }} credits for your purchase.
+Thank you for using AI Greeting Cards!
