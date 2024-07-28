@@ -12,7 +12,7 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from .models import Payment
 
-PRICE_PER_CREDIT = 0.50 # $0.50 for 10 credits
+PRICE_PER_10_CREDITS = 0.50 # $0.50 for 10 credits
 
 User = get_user_model()
 
@@ -22,7 +22,7 @@ class CreateStripeCheckoutSessionView(View):
 
     def post(self, request, *args, **kwargs):
         credits = int(request.POST.get("credits", 10))  # Default to 10 credits
-        price_in_cents = int(PRICE_PER_CREDIT * credits * 10)  # Amount in cents
+        price_in_cents = int(PRICE_PER_10_CREDITS * credits * 10)  # Amount in cents
         user_id = request.user.id  # Get the logged-in user's ID
 
         checkout_session = stripe.checkout.Session.create(
@@ -82,7 +82,7 @@ class StripeWebhookView(View):
             user = User.objects.get(id=user_id)
 
             # Calculate the number of credits
-            credits_to_add = int(amount_total / PRICE_PER_CREDIT * 10)
+            credits_to_add = int(amount_total / PRICE_PER_10_CREDITS * 10)
 
             # Update the user's credits
             user.credits += credits_to_add
@@ -106,7 +106,8 @@ class StripeWebhookView(View):
                 postal_code=address.get('postal_code'),
                 cardholder_email=payment_method.billing_details.email,
                 cardholder_name=payment_method.billing_details.name,
-                card_last4=payment_method.card.last4
+                card_last4=payment_method.card.last4,
+                status='complete',
             )
 
             customer_email = session["customer_details"]["email"]
