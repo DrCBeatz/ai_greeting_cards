@@ -50,6 +50,7 @@
                                 pollingActive = false;
                                 console.log('Polling stopped');
                                 document.removeEventListener('htmx:load', onHtmxLoad);
+                                removeTaskIdFromUrl();
                             });
                             updateCredits();
                         } else if (data.status.startsWith('failed')) {
@@ -62,6 +63,7 @@
                             pollingActive = false;
                             console.log('Polling stopped');
                             document.removeEventListener('htmx:load', onHtmxLoad);
+                            removeTaskIdFromUrl();
                         } else {
                             console.log('Image still processing');
                         }
@@ -73,6 +75,7 @@
                         pollingActive = false;
                         console.log('Polling stopped due to error');
                         document.removeEventListener('htmx:load', onHtmxLoad);
+                        removeTaskIdFromUrl();
                     });
                 }
 
@@ -113,6 +116,20 @@
                     document.querySelector('#user-credits').innerText = `${data.credits} Credits`;
                 });
             }
+
+            function removeTaskIdFromUrl() {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('task_id');
+                history.replaceState({}, '', url);
+            }
+
+            // Force reload the page from the server when navigating back
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+                    console.log('Page is being loaded from bfcache or back button');
+                    window.location.reload();
+                }
+            });
         </script>
     {% endif %}
 </div>
