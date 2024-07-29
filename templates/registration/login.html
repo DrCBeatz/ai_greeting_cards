@@ -6,7 +6,7 @@
   <div class="container">
     <h1 class="my-4 text-center">Login</h1>
     <hr class="mb-4" />
-    <form method="post">
+    <form hx-boost="false" method="post">
       {% csrf_token %} 
       {{ form|crispy }}
       <div class="mt-5">

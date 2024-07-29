@@ -7,7 +7,7 @@
 {% block content %}
 <div class="container text-center">
   <h1 class="my-4">AI Greeting Card App</h1>
-  <form method="POST">
+  <form hx-boost="false" method="POST">
     {% csrf_token %}
     <label class="form-label form-light" for="prompt" style="color: #fff"
       >Enter description to generate image:</label
@@ -45,6 +45,7 @@
     </button>
   </form>
   <a
+    hx-boost="false"
     href="{% url 'image_list' %}"
     class="btn btn-light btn-block mb-4"
     data-mdb-ripple-color="dark"

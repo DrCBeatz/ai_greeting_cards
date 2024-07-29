@@ -30,7 +30,7 @@
 
     {% block head %}{% endblock %}
   </head>
-  <body>
+  <body hx-boost="true">
     {% include 'navbar.html' %}
     {% block messages %}
       {% if messages %}

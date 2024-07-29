@@ -16,11 +16,9 @@
       <button type="submit" class="btn btn-block btn-light">Delete</button>
     </div>
     <div class="my-4">
-      <a href="{% url 'image_list' %}" class="btn btn-block btn-light" data-mdb-ripple-color="dark">Cancel</a>
+      <a hx-boost="false" href="{% url 'image_list' %}" class="btn btn-block btn-light" data-mdb-ripple-color="dark">Cancel</a>
     </div>
   </form>
 </div>
-
-<script type="text/javascript" src="{% static 'js/cancel_button.js' %}"></script>
 
 {% endblock %}

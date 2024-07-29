@@ -18,11 +18,11 @@
       <a class="navbar-brand" href="{% url 'home' %}">AI Greeting Cards App</a>
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'image_list' %}">All Images</a>
+          <a hx-boost="false" class="nav-link" href="{% url 'image_list' %}">All Images</a>
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'image_user_list' %}">My Images</a>
+          <a hx-boost="false" class="nav-link" href="{% url 'image_user_list' %}">My Images</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'buy-credits' %}">Buy Credits</a>
@@ -38,7 +38,7 @@
           <a class="nav-link disabled">{{user.credits}} Credits</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          <a hx-boost="false" class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
         {% else %}
         <li class="nav-item">

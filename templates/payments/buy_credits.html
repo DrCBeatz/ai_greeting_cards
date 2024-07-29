@@ -12,6 +12,7 @@
       <div class="card-text">
         <h3 class="card-text">$0.50 for 10 credits (1 image)</h3>
         <form
+          hx-boost="false"
           class="my-4"
           action="{% url 'create-checkout-session' %}"
           method="POST"
