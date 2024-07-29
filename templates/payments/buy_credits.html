@@ -1,7 +1,7 @@
 <!-- templates/payments/buy_credits.html {% endcomment -->
 
 {% extends "base.html" %} 
-{% block title %} Buy Credits {% endblock title%} 
+{% block title %}AI Greeting Cards | Buy Credits {% endblock title%} 
 {% block head %}<script defer src="https://js.stripe.com/v3/"></script>{% endblock head %}
 {% block content %}
 <div class="container">
@@ -14,7 +14,7 @@
         <form
           hx-boost="false"
           class="my-4"
-          action="{% url 'create-checkout-session' %}"
+          action="{% url 'create-checkout-session' %}" 
           method="POST"
         >
           {% csrf_token %}
