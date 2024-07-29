@@ -39,8 +39,6 @@ def home(request):
         if request.user.credits >= 10:
             prompt = request.POST.get('prompt')
             size = request.POST.get('size')
-            request.user.credits -= 10
-            request.user.save()
             task = generate_image_task.delay(prompt, size, request.user.id)
             return HttpResponseRedirect(reverse('image_list') + f"?task_id={task.id}")
         else:

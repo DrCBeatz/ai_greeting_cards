@@ -13,6 +13,7 @@
                 <img class="mb-2" src="{% static 'img/bars-rotate-fade.svg' %}" alt="Loading..." />
                 <p>Processing image...</p>
             </div>
+            <div id="task-status" class="alert alert-danger hidden"></div>
         {% endif %}
         
         <div id="image-list-container" class="row d-flex justify-content-center">
@@ -54,6 +55,7 @@
                             console.log('Image generation failed:', data.status);
                             document.getElementById('loading-spinner').classList.add('hidden');
                             document.getElementById('task-status').innerText = data.status;
+                            document.getElementById('task-status').classList.remove('hidden');
                             clearInterval(pollingInterval);  // Stop polling
                             pollingInterval = null;
                             pollingActive = false;
