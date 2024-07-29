@@ -51,6 +51,7 @@
                                 console.log('Polling stopped');
                                 document.removeEventListener('htmx:load', onHtmxLoad);
                             });
+                            updateCredits();
                         } else if (data.status.startsWith('failed')) {
                             console.log('Image generation failed:', data.status);
                             document.getElementById('loading-spinner').classList.add('hidden');
@@ -104,6 +105,14 @@
             });
 
             document.addEventListener('htmx:load', onHtmxLoad);
+
+            function updateCredits() {
+                fetch('/get-credits/')
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelector('#user-credits').innerText = `${data.credits} Credits`;
+                });
+            }
         </script>
     {% endif %}
 </div>

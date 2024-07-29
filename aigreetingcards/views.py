@@ -155,3 +155,7 @@ def send_image_email(request, pk):
         form = EmailImageForm()
     
     return render(request, 'send_image_email.html', {'form': form, 'image': image})
+
+@login_required(login_url='login')
+def get_credits(request):
+    return JsonResponse({'credits': request.user.credits})

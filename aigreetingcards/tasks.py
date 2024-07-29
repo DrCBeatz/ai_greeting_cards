@@ -39,6 +39,4 @@ def generate_image_task(prompt, size, user_id):
 
     except Exception as e:
         redis_client.set(f"task_status:{task_id}", f"failed: {str(e)}")
-        # Refund credits if user generation fails
-        user.credits += 10
         user.save()
