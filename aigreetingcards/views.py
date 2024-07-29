@@ -92,6 +92,11 @@ class ImageDeleteView(DeleteView):
     model = Image
     template_name = 'image_delete.html'
     success_url = reverse_lazy('image_list')
+    success_message = "Image deleted successfully"
+    
+    def get_success_url(self):
+        messages.success(self.request, self.success_message)
+        return self.success_url
 
 class ImageUserListView(LoginRequiredMixin, ListView):
     model = Image

@@ -10,13 +10,13 @@
   <hr>
   <p>Are you sure you want to delete <em>{{ image.title }}?</em></p>
 
-  <form method="post">
+  <form hx-boost="false" method="post">
     {% csrf_token %}
     <div class="my-4">
       <button type="submit" class="btn btn-block btn-light">Delete</button>
     </div>
     <div class="my-4">
-      <a hx-boost="false" href="{% url 'image_list' %}" class="btn btn-block btn-light" data-mdb-ripple-color="dark">Cancel</a>
+      <a href="{% url 'image_list' %}" class="btn btn-block btn-light" data-mdb-ripple-color="dark">Cancel</a>
     </div>
   </form>
 </div>
