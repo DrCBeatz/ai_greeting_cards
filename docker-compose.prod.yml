@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    command: gunicorn core.wsgi -b 0.0.0.0:8000
+    environment:
+      - DJANGO_DEBUG=False
+      - DJANGO_SECURE_SSL_REDIRECT=True
+      - DJANGO_SECURE_HSTS_SECONDS=31536000
+      - DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+      - DJANGO_SECURE_HSTS_PRELOAD=True
+      - DJANGO_SESSION_COOKIE_SECURE=True
+      - DJANGO_CSRF_COOKIE_SECURE=True
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${RDS_HOST}  # Replace with the RDS endpoint
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - BACKEND_DOMAIN=${BACKEND_DOMAIN}
+      - PAYMENT_SUCCESS_URL=${PAYMENT_SUCCESS_URL}
+      - PAYMENT_CANCEL_URL=${PAYMENT_CANCEL_URL}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+      - celery
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  celery:
+    build: .
+    command: celery -A core worker --loglevel=info
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${RDS_HOST}  # Replace with the RDS endpoint
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - redis
