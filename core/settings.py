@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'payments',
     # Celery result backend
     'django_celery_results',
+    'storages',
 ]
 
 # Middleware
@@ -138,9 +139,23 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+# S3 Bucket settings
+S3_BUCKET_ENABLED = env.bool("S3_BUCKET_ENABLED", default=False)
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-2')
+AWS_QUERYSTRING_AUTH = False  # Disable URL query strings for media files
+
 # Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+if not S3_BUCKET_ENABLED:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    # Optional: Custom domain for serving media files
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
