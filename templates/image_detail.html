@@ -9,7 +9,7 @@
     <div class="row d-flex justify-content-center">
         <div>
             <a hx-boost="false" href="{{ image.image_file.url }}" download="{{ image.image_file }}.png">
-                <img title="(click image to download)" class="img-fluid mt-4 rounded ripple" src="/media/{{ image.image_file }}" alt="Generated image" />
+                <img title="(click image to download)" class="img-fluid mt-4 rounded ripple" src="{{ image.image_file.url }}" alt="Generated image" />
             </a>
         </div>
         <a class="mt-3 mb-2 small text-muted">(click image to download)</a>
