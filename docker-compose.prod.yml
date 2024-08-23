@@ -1,9 +1,11 @@
+# docker-compose.prod.yml
+
 version: "3.9"
 
 services:
   web:
     build: .
-    command: gunicorn core.wsgi -b 0.0.0.0:8000
+    command: gunicorn core.wsgi -b 0.0.0.0:8000 --timeout 120 --workers 3
     environment:
       - DJANGO_DEBUG=False
       - DJANGO_SECURE_SSL_REDIRECT=True
