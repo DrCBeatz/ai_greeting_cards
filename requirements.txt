@@ -3,7 +3,7 @@
 -i https://pypi.org/simple
 asgiref==3.8.1 ; python_version >= '3.8'
 django==4.2.13
-psycopg[binary]==3.1.19
+psycopg[binary,pool]==3.1.19
 psycopg-binary==3.1.19
 sqlparse==0.5.0 ; python_version >= '3.8'
 typing-extensions==4.12.2 ; python_version >= '3.8'
@@ -25,4 +25,4 @@ requests==2.32.3
 stripe==10.4.0
 django-storages==1.14.4
 boto3==1.35.2
-libpq-dev==9.4.3
+
