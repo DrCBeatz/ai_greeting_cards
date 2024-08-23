@@ -1,7 +1,5 @@
 # docker-compose.prod.yml
 
-version: "3.9"
-
 services:
   web:
     build: .
