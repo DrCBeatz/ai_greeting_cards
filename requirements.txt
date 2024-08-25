@@ -4,7 +4,6 @@
 asgiref==3.8.1 ; python_version >= '3.8'
 django==4.2.13
 psycopg[binary,pool]==3.1.19
-psycopg-binary==3.1.19
 sqlparse==0.5.0 ; python_version >= '3.8'
 typing-extensions==4.12.2 ; python_version >= '3.8'
 whitenoise==6.1.0
