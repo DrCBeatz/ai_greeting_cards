@@ -159,3 +159,6 @@ def send_image_email(request, pk):
 @login_required(login_url='login')
 def get_credits(request):
     return JsonResponse({'credits': request.user.credits})
+
+def health_check(request):
+    return JsonResponse({'status': 'ok'})

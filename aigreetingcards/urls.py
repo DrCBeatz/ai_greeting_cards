@@ -16,6 +16,7 @@ urlpatterns = [
     path('image/<int:pk>/send-email/', views.send_image_email, name='send_image_email'),
     path('check-task-status/<str:task_id>/', views.check_task_status, name='check_task_status'),
     path('get-credits/', views.get_credits, name='get_credits'),
+    path('health/', views.health, name='health_check'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
