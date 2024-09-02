@@ -3,7 +3,7 @@
 services:
   web:
     build: .
-    command: gunicorn core.wsgi -b 0.0.0.0:8000 --timeout 120 --workers 3
+    command: gunicorn core.wsgi -b 0.0.0.0:80 --timeout 120 --workers 3
     environment:
       - DJANGO_DEBUG=${DJANGO_DEBUG}
       - DJANGO_SECURE_SSL_REDIRECT=${DJANGO_SECURE_SSL_REDIRECT}
@@ -29,7 +29,7 @@ services:
       - PAYMENT_CANCEL_URL=${PAYMENT_CANCEL_URL}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
     ports:
-      - 8000:8000
+      - 80:80
     depends_on:
       - redis
       - celery

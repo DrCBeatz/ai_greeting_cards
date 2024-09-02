@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "web_app_tg" {
     vpc_id = aws_vpc.main.id
     target_type = "instance"
     health_check {
-        path                = "/health"
+        path                = "/health/"
         port                = "80"
         protocol            = "HTTP"
         interval            = 30
