@@ -3,7 +3,7 @@
 resource "aws_launch_template" "web_app" {
     name_prefix = "web-app"
     image_id = var.ami_id
-    instance_type = "t4g.micro"
+    instance_type = var.instance_type
 
     iam_instance_profile {
         name = aws_iam_instance_profile.ec2_instance_profile.name
@@ -12,7 +12,7 @@ resource "aws_launch_template" "web_app" {
     network_interfaces {
         associate_public_ip_address = true
         security_groups = [aws_security_group.ec2_sg.id]
-        subnet_id = aws_subnet.public[0].id # Specify the first subnet, or change the index to match your need
+        subnet_id = aws_subnet.public[0].id # Specify the public subnet
     }
 
     user_data = base64encode(<<-EOF
@@ -54,7 +54,7 @@ resource "aws_autoscaling_group" "web_app_asg" {
                 version = "$Latest"
             }
             override {
-                instance_type = "t4g.micro"
+                instance_type = var.instance_type
             }
         }
 
