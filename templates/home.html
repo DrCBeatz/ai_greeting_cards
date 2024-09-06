@@ -27,6 +27,8 @@
         <div class="form-notch-trailing"></div>
       </div>
     </div>
+
+    <!-- Size selection -->
     <label class="form-label form-light" for="size" style="color: #fff"
     >Select image size:</label
     >
@@ -35,7 +37,15 @@
       <option value="1024x1792">1024x1792 (4:7)</option>
       <option value="1792x1024">1792x1024 (7:4)</option>
     </select>
-    <p class="text-muted mb-4"><em>(10 credits required to generate image)</em></p>
+
+    <!-- Quality selection -->
+  <label class="form-label form-light" for="quality" style="color: #fff">Select image quality:</label>
+  <select class="form-select mb-4" name="quality" id="quality" style="color: #fff; background-color: #333; border-color: #C3C3C3;">
+    <option value="standard">Standard (10 credits)</option>
+    <option value="hd">HD (20 credits)</option>
+  </select>
+
+  <!-- Submit button -->
     <button
       type="submit"
       class="btn btn-light btn-block mb-4"
