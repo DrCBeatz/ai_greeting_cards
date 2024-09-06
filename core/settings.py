@@ -202,6 +202,7 @@ CSP_SCRIPT_SRC = ("'self'",)
 
 CSP_IMG_SRC = (
     "'self'",
+    "ai-greeting-cards-media.s3.amazonaws.com",
     "data:",
     "blob:",
 )
