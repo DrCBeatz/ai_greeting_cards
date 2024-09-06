@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
     'crispy_bootstrap5',
+    'csp',
     # Local apps
     'accounts.apps.AccountsConfig',
     'aigreetingcards',
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -187,8 +189,45 @@ STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 
+# django-csp headers:
+
+CSP_STYLE_SRC = (
+    "'self'",
+    "use.fontawesome.com",
+    "cdnjs.cloudflare.com",
+    "fonts.googleapis.com",
+)
+
+CSP_SCRIPT_SRC = ("'self'",)
+
+CSP_IMG_SRC = (
+    "'self'",
+    "data:",
+    "blob:",
+)
+
+CSP_FONT_SRC = (
+    "'self'",
+    "cdnjs.cloudflare.com",
+    "fonts.gstatic.com",
+    "fonts.googleapis.com",
+    "data:",
+)
+
+CSP_CONNECT_SRC = ("'self'",)
+CSP_OBJECT_SRC = ("'none'",)
+CSP_BASE_URI = ("'self'",)
+CSP_FRAME_ANCESTORS = "'self'"
+CSP_FORM_ACTION = ("'self'",)
+CSP_INCLUDE_NONCE_IN = ("script-src", "style-src")
+CSP_MANIFEST_SRC = ("'self'",)
+CSP_WORKER_SRC = ("'self'",)
+CSP_MEDIA_SRC = ("'self'",)
+CSP_CONNECT_SRC = ("'self'",)
+CSP_DEFAULT_SRC = ("'none'",)
+
 # Security settings for production
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=False) # Set to False in production because ALB handles SSL termination
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_HSTS_SECONDS = env.int("DJANGO_SECURE_HSTS_SECONDS", default=31536000)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=True)

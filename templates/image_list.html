@@ -24,7 +24,8 @@
     
     {% if task_id %}
         <div id="task-status"></div>
-        <script>
+        
+        <script nonce={{request.csp_nonce}}>
             var pollingInterval = null;
             var pollingActive = false;
 

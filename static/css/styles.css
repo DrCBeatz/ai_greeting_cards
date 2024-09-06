@@ -1,3 +1,17 @@
 .hidden {
     display: none;
 }
+
+.color-white {
+    color: #fff;
+}
+
+.select-styles {
+    color: #fff;
+    background-color: #333;
+    border-color: #C3C3C3;
+}
+
+.mask-background-color {
+    background-color: rgba(251, 251, 251, 0.15);
+}

@@ -9,16 +9,15 @@
   <h1 class="my-4">AI Greeting Card App</h1>
   <form hx-boost="false" method="POST">
     {% csrf_token %}
-    <label class="form-label form-light" for="prompt" style="color: #fff"
+    <label class="form-label form-light color-white" for="prompt"
       >Enter description to generate image:</label
     >
-    <div class="form-outline form-light mb-4">
+    <div class="form-outline form-light mb-4 color-white">
       <input
       type="text"
       class="form-control form-light"
       name="prompt"
       id="prompt"
-      style="color: #fff"
       />
       
       <div class="form-notch">
@@ -29,18 +28,18 @@
     </div>
 
     <!-- Size selection -->
-    <label class="form-label form-light" for="size" style="color: #fff"
+    <label class="form-label form-light color-white" for="size"
     >Select image size:</label
     >
-    <select class="form-select mb-4" data-mdb-select-init name="size" id="size" style="color: #fff; background-color: #333; border-color: #C3C3C3;">
+    <select class="form-select mb-4 select-styles" data-mdb-select-init name="size" id="size">
       <option value="1024x1024">1024x1024 (1:1)</option>
       <option value="1024x1792">1024x1792 (4:7)</option>
       <option value="1792x1024">1792x1024 (7:4)</option>
     </select>
 
     <!-- Quality selection -->
-  <label class="form-label form-light" for="quality" style="color: #fff">Select image quality:</label>
-  <select class="form-select mb-4" name="quality" id="quality" style="color: #fff; background-color: #333; border-color: #C3C3C3;">
+  <label class="form-label form-light color-white" for="quality">Select image quality:</label>
+  <select class="form-select mb-4 select-styles" name="quality" id="quality">
     <option value="standard">Standard (10 credits)</option>
     <option value="hd">HD (20 credits)</option>
   </select>
