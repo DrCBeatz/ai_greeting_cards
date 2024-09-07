@@ -95,7 +95,7 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --targets '[{"Key":"tag:Name","Values":["web-app-ec2"]}]' \
             --comment "Pull new code and restart Docker containers" \
-            --parameters 'commands=["cd /ai_greeting_cards && git pull origin main && docker-compose -f docker-compose.prod.yml up -d --build"]' \
+            --parameters 'commands=["cd /ai_greeting_cards && git fetch origin && git checkout main && git pull origin main && docker-compose -f docker-compose.prod.yml up -d --build"]' \
             --region ${{ secrets.AWS_REGION }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
