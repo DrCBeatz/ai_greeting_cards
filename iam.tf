@@ -44,10 +44,14 @@ resource "aws_iam_role_policy" "ec2_policy" {
       {
         Effect = "Allow",
         Action = [
+          "ssm:DescribeInstanceInformation",
+          "ssm:GetCommandInvocation",
+          "ssm:ListCommands",
+          "ssm:SendCommand",
+          "ssm:GetParametersByPath",
           "ssm:GetParameter",
           "ssm:GetParameters",
-          "ssm:SendCommand",           
-          "ssm:ListCommands"
+          "ssm:StartSession"
         ],
         Resource = "*"
       }
