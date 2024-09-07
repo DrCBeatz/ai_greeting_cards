@@ -33,7 +33,7 @@ resource "aws_launch_template" "web_app" {
 
     git clone https://github.com/DrCBeatz/ai_greeting_cards.git
     cd ai_greeting_cards
-    sudo chown -R $(whoami):$(whoami) /ai_greeting_cards
+    sudo chown -R ec2-user:ec2-user /ai_greeting_cards
 
     cat <<EOT >> .env
     ${local.env_file_content}
