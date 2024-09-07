@@ -24,6 +24,10 @@ resource "aws_launch_template" "web_app" {
     sudo usermod -a -G docker ec2-user
     sudo chmod 666 /var/run/docker.sock
     sudo yum install git -y
+    sudo yum install -y amazon-ssm-agent  # Install SSM agent
+    sudo systemctl enable amazon-ssm-agent
+    sudo systemctl start amazon-ssm-agent
+
     sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
 
