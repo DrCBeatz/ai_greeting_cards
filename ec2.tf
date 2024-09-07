@@ -5,6 +5,13 @@ resource "aws_launch_template" "web_app" {
     image_id = var.ami_id
     instance_type = var.instance_type
 
+    tag_specifications {
+        resource_type = "instance"
+        tags = {
+            Name = "web-app-ec2"
+        }   
+    }
+
     iam_instance_profile {
         name = aws_iam_instance_profile.ec2_instance_profile.name
     }
@@ -49,7 +56,10 @@ resource "aws_autoscaling_group" "web_app_asg" {
     desired_capacity = 1
     max_size = 3
     min_size = 1
+    
     vpc_zone_identifier = aws_subnet.public.*.id
+
+    
 
     mixed_instances_policy {
         launch_template {
