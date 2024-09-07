@@ -5,7 +5,7 @@ name: Django CI/CD
 on:
   push:
     branches:
-      - main  # Deploy only when pushing to the main branch
+      - main
 
 jobs:
   test:
@@ -84,7 +84,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: test  # Only deploy if the test job passes
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
