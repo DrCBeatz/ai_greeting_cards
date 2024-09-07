@@ -3,7 +3,10 @@
 resource "aws_s3_bucket" "media_bucket" {
     bucket = "ai-greeting-cards-media"
 
-    # Other bucket settings if any...
+    lifecycle {
+        prevent_destroy = true
+    }
+
 }
 
 resource "aws_s3_bucket_public_access_block" "media_bucket_public_access" {
