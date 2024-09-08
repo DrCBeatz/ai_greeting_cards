@@ -2,16 +2,16 @@
     display: none;
 }
 
-.color-white {
+.form__label--white {
     color: #fff;
 }
 
-.select-styles {
+.form__select--styled {
     color: #fff;
     background-color: #333;
     border-color: #C3C3C3;
 }
 
-.mask-background-color {
+.image-card__mask--background-light {
     background-color: rgba(251, 251, 251, 0.15);
 }
