@@ -1,4 +1,4 @@
-<!-- templates/payments/buy_credits.html {% endcomment -->
+<!-- templates/payments/buy_credits.html -->
 
 {% extends "base.html" %} 
 {% block title %}AI Greeting Cards | Buy Credits {% endblock title%} 
@@ -10,7 +10,8 @@
       <h1 class="card-title mb-4">Buy Credits For Image Generation</h1>
       <hr>
       <div class="card-text">
-        <h3 class="card-text">$0.50 for 10 credits (1 image)</h3>
+        <h3 class="card-text">10 credits ($0.50) = 1 standard quality image</h3>
+        <h3 class="card-text">20 credits ($1.00) = 1 HD quality image</h3>
         <form
           hx-boost="false"
           class="my-4"
@@ -18,7 +19,7 @@
           method="POST"
         >
           {% csrf_token %}
-          <label class="mb-2" for="credits">Select Credits:</label>
+          <label class="mb-2" for="credits">Select Amount of Credits for Purchase:</label>
           <select class="form-control mb-4" name="credits" id="credits" >
             <option value="10">10 Credits ($0.50)</option>
             <option value="20">20 Credits ($1.00)</option>
