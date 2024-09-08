@@ -10,7 +10,7 @@ import redis
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 
 @shared_task
-def generate_image_task(prompt, size, quality, user_id):
+def generate_image_task(prompt, size, quality, style, user_id):
     task_id = generate_image_task.request.id
     redis_client.set(f"task_status:{task_id}", "processig")
 
@@ -23,6 +23,8 @@ def generate_image_task(prompt, size, quality, user_id):
             prompt=prompt,
             size=size,
             quality=quality,
+            # num_images=1,
+            style=style,            
             n=1,
         )
 

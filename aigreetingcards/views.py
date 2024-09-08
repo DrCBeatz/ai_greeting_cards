@@ -39,6 +39,7 @@ def home(request):
         prompt = request.POST.get('prompt')
         size = request.POST.get('size')
         quality = request.POST.get('quality', 'standard')  # Default to 'standard' if not provided
+        style = request.POST.get('style', 'vivid')  # Default to 'vivid' if not provided
 
         # Determine the required credits based on the quality
         if quality == 'hd':
@@ -49,7 +50,7 @@ def home(request):
         # Check if the user has enough credits
         if request.user.credits >= required_credits:
             # Start the asynchronous task without deducting credits here
-            task = generate_image_task.delay(prompt, size, quality, request.user.id)
+            task = generate_image_task.delay(prompt, size, quality, style, request.user.id)
             return HttpResponseRedirect(reverse('image_list') + f"?task_id={task.id}")
         else:
             messages.error(request, 'Insufficient credits to generate an image.')
