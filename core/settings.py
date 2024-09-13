@@ -25,6 +25,9 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default="*")
 # Admin URL
 ADMIN_URL = env("DJANGO_ADMIN_URL", default="admin/")
 
+# CSP enabled env variable
+CSP_ENABLED = env.bool("CSP_ENABLED", default=True)
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,9 +59,12 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'csp.middleware.CSPMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if CSP_ENABLED:
+    index = MIDDLEWARE.index('django.contrib.messages.middleware.MessageMiddleware')
+    MIDDLEWARE.insert(index, 'csp.middleware.CSPMiddleware')
 
 # Root URL configuration
 ROOT_URLCONF = 'core.urls'
@@ -191,41 +197,42 @@ STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 
 # django-csp headers:
 
-CSP_STYLE_SRC = (
-    "'self'",
-    "use.fontawesome.com",
-    "cdnjs.cloudflare.com",
-    "fonts.googleapis.com",
-)
+if CSP_ENABLED:
+    CSP_STYLE_SRC = (
+        "'self'",
+        "use.fontawesome.com",
+        "cdnjs.cloudflare.com",
+        "fonts.googleapis.com",
+    )
 
-CSP_SCRIPT_SRC = ("'self'",)
+    CSP_SCRIPT_SRC = ("'self'",)
 
-CSP_IMG_SRC = (
-    "'self'",
-    "ai-greeting-cards-media.s3.amazonaws.com",
-    "data:",
-    "blob:",
-)
+    CSP_IMG_SRC = (
+        "'self'",
+        "ai-greeting-cards-media.s3.amazonaws.com",
+        "data:",
+        "blob:",
+    )
 
-CSP_FONT_SRC = (
-    "'self'",
-    "cdnjs.cloudflare.com",
-    "fonts.gstatic.com",
-    "fonts.googleapis.com",
-    "data:",
-)
+    CSP_FONT_SRC = (
+        "'self'",
+        "cdnjs.cloudflare.com",
+        "fonts.gstatic.com",
+        "fonts.googleapis.com",
+        "data:",
+    )
 
-CSP_CONNECT_SRC = ("'self'",)
-CSP_OBJECT_SRC = ("'none'",)
-CSP_BASE_URI = ("'self'",)
-CSP_FRAME_ANCESTORS = "'self'"
-CSP_FORM_ACTION = ("'self'", "checkout.stripe.com")
-CSP_INCLUDE_NONCE_IN = ("script-src", "style-src")
-CSP_MANIFEST_SRC = ("'self'",)
-CSP_WORKER_SRC = ("'self'",)
-CSP_MEDIA_SRC = ("'self'",)
-CSP_CONNECT_SRC = ("'self'",)
-CSP_DEFAULT_SRC = ("'none'",)
+    CSP_CONNECT_SRC = ("'self'",)
+    CSP_OBJECT_SRC = ("'none'",)
+    CSP_BASE_URI = ("'self'",)
+    CSP_FRAME_ANCESTORS = "'self'"
+    CSP_FORM_ACTION = ("'self'", "checkout.stripe.com")
+    CSP_INCLUDE_NONCE_IN = ("script-src", "style-src")
+    CSP_MANIFEST_SRC = ("'self'",)
+    CSP_WORKER_SRC = ("'self'",)
+    CSP_MEDIA_SRC = ("'self'",)
+    CSP_CONNECT_SRC = ("'self'",)
+    CSP_DEFAULT_SRC = ("'none'",)
 
 # Security settings for production
 SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=False) # Set to False in production because ALB handles SSL termination
