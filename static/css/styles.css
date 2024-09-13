@@ -15,3 +15,16 @@
 .image-card__mask--background-light {
     background-color: rgba(251, 251, 251, 0.15);
 }
+
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 200ms ease-in;
+}
+
+.htmx-request .htmx-indicator {
+opacity: 1;
+}
+
+.htmx-request.htmx-indicator {
+opacity: 1;
+}
