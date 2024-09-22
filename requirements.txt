@@ -25,4 +25,5 @@ stripe==10.4.0
 django-storages==1.14.4
 boto3==1.35.2
 django-csp==3.8.0
+django-axes==6.5.2
 

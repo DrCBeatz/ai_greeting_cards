@@ -31,6 +31,9 @@ CSP_ENABLED = env.bool("CSP_ENABLED", default=True)
 # Logging Enabled env variable
 LOGGING_ENABLED = env.bool("LOGGING_ENABLED", default=False)
 
+# Django Axes enabled env variable
+DJANGO_AXES_ENABLED = env.bool("DJANGO_AXES_ENABLED", default=True)
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,13 +47,13 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'csp',
+    'axes',
+    'django_celery_results',
+    'storages',
     # Local apps
     'accounts.apps.AccountsConfig',
     'aigreetingcards',
     'payments',
-    # Celery result backend
-    'django_celery_results',
-    'storages',
 ]
 
 # Middleware
@@ -63,6 +66,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 if CSP_ENABLED:
@@ -206,6 +215,12 @@ PAYMENT_CANCEL_URL = env("PAYMENT_CANCEL_URL")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
+
+# Django-Axes settings
+
+AXES_ENABLED = DJANGO_AXES_ENABLED
+AXES_FAILURE_LIMIT = 10
+AXES_LOCK_OUT_AT_FAILURE = True
 
 # django-csp headers:
 
