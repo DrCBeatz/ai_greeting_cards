@@ -28,6 +28,9 @@ ADMIN_URL = env("DJANGO_ADMIN_URL", default="admin/")
 # CSP enabled env variable
 CSP_ENABLED = env.bool("CSP_ENABLED", default=True)
 
+# Logging Enabled env variable
+LOGGING_ENABLED = env.bool("LOGGING_ENABLED", default=False)
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -113,20 +116,29 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='webmaster@localhost.com')
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+if LOGGING_ENABLED:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+            },
         },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
+        'loggers': {
+            'django': {
+                'handlers': ['console'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
+            'psycopg': {
+                'handlers': ['console'],
+                'level': 'ERROR',
+                'propagate': False,
+            },
+        },
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
