@@ -14,7 +14,8 @@ environs[django]==9.5.0
 openai==1.35.7
 django-cleanup==8.1.0
 pillow==10.4.0
-django-crispy-forms==2.2
+django-bootstrap5==24.3
+django-crispy-forms==2.3
 crispy-bootstrap5==2024.2
 celery==5.4.0
 django-celery-results==2.5.1
@@ -26,4 +27,3 @@ django-storages==1.14.4
 boto3==1.35.2
 django-csp==3.8.0
 django-axes==6.5.2
-
