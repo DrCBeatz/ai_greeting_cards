@@ -1,5 +1,3 @@
-# payments/views.py
-
 import stripe
 from django.conf import settings
 from django.views import View
@@ -13,17 +11,28 @@ from django.core.mail import send_mail
 from .models import Payment
 from django.template.loader import render_to_string
 
-PRICE_PER_10_CREDITS = 0.50 # $0.50 for 10 credits
-
 User = get_user_model()
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
+CREDITS_PRICING = {
+    100: 500,    # $5.00 in cents
+    250: 1200,   # $12.00 in cents
+    500: 2250,   # $22.50 in cents
+    750: 3250,   # $32.50 in cents
+    1000: 4000,  # $40.00 in cents
+}
+
 class CreateStripeCheckoutSessionView(View):
 
     def post(self, request, *args, **kwargs):
-        credits = int(request.POST.get("credits", 10))  # Default to 10 credits
-        price_in_cents = int(PRICE_PER_10_CREDITS * credits * 10)  # Amount in cents
+        credits = int(request.POST.get("credits", 100))  # Default to 100 credits
+        price_in_cents = CREDITS_PRICING.get(credits)
+
+        if price_in_cents is None:
+            # Handle invalid credits value
+            return HttpResponse("Invalid number of credits selected.", status=400)
+
         user_id = request.user.id  # Get the logged-in user's ID
 
         checkout_session = stripe.checkout.Session.create(
@@ -38,16 +47,19 @@ class CreateStripeCheckoutSessionView(View):
                             "description": "Credits for AI Greeting Cards App",
                         },
                     },
-                    "quantity": "1",
+                    "quantity": 1,
                 }
             ],
-            metadata={"user_id": user_id},  # Include the user ID in the metadata
+            metadata={
+                "user_id": user_id,
+                "credits": credits,
+            },
             mode="payment",
             success_url=settings.PAYMENT_SUCCESS_URL,
             cancel_url=settings.PAYMENT_CANCEL_URL,
         )
         return redirect(checkout_session.url)
-    
+
 
 class SuccessView(TemplateView):
     template_name = "payments/success.html"
@@ -78,12 +90,8 @@ class StripeWebhookView(View):
         if event["type"] == "checkout.session.completed":
             session = event['data']['object']
             user_id = session["metadata"]["user_id"]
-            amount_total = session["amount_total"] / 100
-            currency = session["currency"].upper()
+            credits_to_add = int(session["metadata"]["credits"])
             user = User.objects.get(id=user_id)
-
-            # Calculate the number of credits
-            credits_to_add = int(amount_total / PRICE_PER_10_CREDITS * 10)
 
             # Update the user's credits
             user.credits += credits_to_add
@@ -99,8 +107,8 @@ class StripeWebhookView(View):
             # Save payment details
             payment = Payment.objects.create(
                 user=user,
-                amount=amount_total,
-                currency=currency,
+                amount=session["amount_total"] / 100,  # Amount in dollars
+                currency=session["currency"].upper(),
                 stripe_payment_intent_id=payment_intent_id,
                 stripe_checkout_session_id=session.get('id'),
                 country=address.get('country'),
@@ -118,7 +126,7 @@ class StripeWebhookView(View):
                 'user': user,
                 'payment': payment,
                 'credits_to_add': credits_to_add,
-            } )
+            })
 
             send_mail(
                 subject=email_subject,
