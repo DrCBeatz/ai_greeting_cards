@@ -10,8 +10,18 @@
       <h1 class="card-title mb-4">Buy Credits For Image Generation</h1>
       <hr>
       <div class="card-text">
-        <h3 class="card-text">10 credits ($0.50) = 1 standard quality image</h3>
-        <h3 class="card-text">20 credits ($1.00) = 1 HD quality image</h3>
+        <h4 class="card-text">10 credits ($0.50) = 1 standard quality image</h4>
+        <h4 class="card-text">20 credits ($1.00) = 1 HD quality image</h4>
+        <hr>
+        <h3 class="card-text">Credits Pricing Options:</h3>
+        <ul class="list-group list-group-light mb-4">
+          <li class="list-group-item list-group-item-dark">100 Credits ($5.00) - Ideal for trying out our service.</li>
+          <li class="list-group-item list-group-item-dark">250 Credits ($12.00) - Save $0.50 compared to buying multiple smaller packages.</li>
+          <li class="list-group-item list-group-item-dark">500 Credits ($22.50) - Our most popular option!</li>
+          <li class="list-group-item list-group-item-dark">750 Credits ($32.50) - Best value for frequent users.</li>
+          <li class="list-group-item list-group-item-dark">1000 Credits ($40.00) - Maximum savings!</li>
+        </ul>
+        <hr>
         <form
           hx-boost="false"
           class="my-4"
@@ -21,11 +31,11 @@
           {% csrf_token %}
           <label class="mb-2" for="credits">Select Amount of Credits for Purchase:</label>
           <select class="form-control mb-4" name="credits" id="credits" >
-            <option value="10">10 Credits ($0.50)</option>
-            <option value="20">20 Credits ($1.00)</option>
-            <option value="30">30 Credits ($1.50)</option>
-            <option value="40">40 Credits ($2.00)</option>
-            <option value="50">50 Credits ($2.50)</option>
+            <option value="100">100 Credits ($5.00)</option>
+            <option value="250">250 Credits ($12.00)</option>
+            <option value="500">500 Credits ($22.50)</option>
+            <option value="750">750 Credits ($32.50)</option>
+            <option value="1000">1000 Credits ($40.00)</option>
           </select>
           <button type="submit" class="btn btn-light btn-block" data-mdb-ripple-color="dark">Checkout</button>
         </form>
