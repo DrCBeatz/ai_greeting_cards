@@ -12,7 +12,7 @@ pytest==8.0.0
 pytest-django==4.5.2
 marshmallow>=3.13,<4.0
 environs[django]==9.5.0
-openai==1.35.7
+openai==1.58.1
 django-cleanup==8.1.0
 pillow==10.4.0
 django-bootstrap5==24.3
