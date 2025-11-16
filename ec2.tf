@@ -43,14 +43,13 @@ resource "aws_launch_template" "web_app" {
     BX_VER="v0.17.1"
     C_VER="v2.30.3"
 
-    curl -L "https://github.com/docker/buildx/releases/download/${BX_VER}/buildx-${BX_VER}.linux-${ARCH_DL}" \
+    curl -L "https://github.com/docker/buildx/releases/download/$BX_VER/buildx-$BX_VER.linux-$ARCH_DL" \
       -o /usr/libexec/docker/cli-plugins/docker-buildx
     chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
 
-    curl -L "https://github.com/docker/compose/releases/download/${C_VER}/docker-compose-linux-${ARCH}" \
+    curl -L "https://github.com/docker/compose/releases/download/$C_VER/docker-compose-linux-$ARCH" \
       -o /usr/libexec/docker/cli-plugins/docker-compose
     chmod +x /usr/libexec/docker/cli-plugins/docker-compose
-
     # --- Fetch app code ---
     APP_DIR="/opt/ai_greeting_cards"
     if [ ! -d "$APP_DIR/.git" ]; then
