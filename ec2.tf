@@ -23,27 +23,35 @@ resource "aws_launch_template" "web_app" {
   user_data = base64encode(<<-EOF
     #!/bin/bash
     set -euxo pipefail
-    # Log everything (helps a ton during Spot replacements)
     exec > >(tee /var/log/user-data.log | logger -t user-data -s 2>/dev/console) 2>&1
 
-    # ---- System updates ----
-    dnf -y update
+    # --- Update packages ---
+    yum update -y
 
-    # ---- Install Docker from Docker's repo so we get buildx + compose plugins ----
-    dnf -y install dnf-plugins-core
-    dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
-    dnf install -y \
-      docker-ce docker-ce-cli containerd.io \
-      docker-buildx-plugin docker-compose-plugin \
-      git amazon-ssm-agent
+    # --- Install Docker, git, and SSM agent from Amazon repos ---
+    yum install -y docker git amazon-ssm-agent
 
     systemctl enable --now docker
     systemctl enable --now amazon-ssm-agent || true
 
-    # Allow ec2-user to use docker on login shells (not needed for this script)
-    usermod -aG docker ec2-user || true
+    # --- Install Docker CLI plugins (Buildx + Compose) ---
+    mkdir -p /usr/libexec/docker/cli-plugins
 
-    # ---- Fetch app code (idempotent) ----
+    ARCH="$(uname -m)"
+    if [ "$ARCH" = "aarch64" ]; then ARCH_DL="arm64"; else ARCH_DL="amd64"; fi
+
+    BX_VER="v0.17.1"
+    C_VER="v2.30.3"
+
+    curl -L "https://github.com/docker/buildx/releases/download/${BX_VER}/buildx-${BX_VER}.linux-${ARCH_DL}" \
+      -o /usr/libexec/docker/cli-plugins/docker-buildx
+    chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
+
+    curl -L "https://github.com/docker/compose/releases/download/${C_VER}/docker-compose-linux-${ARCH}" \
+      -o /usr/libexec/docker/cli-plugins/docker-compose
+    chmod +x /usr/libexec/docker/cli-plugins/docker-compose
+
+    # --- Fetch app code ---
     APP_DIR="/opt/ai_greeting_cards"
     if [ ! -d "$APP_DIR/.git" ]; then
       git clone https://github.com/DrCBeatz/ai_greeting_cards.git "$APP_DIR"
@@ -54,23 +62,16 @@ resource "aws_launch_template" "web_app" {
     chown -R ec2-user:ec2-user "$APP_DIR"
     cd "$APP_DIR"
 
-    # ---- Write .env from Terraform locals (quoted heredoc prevents accidental $ expansion) ----
+    # --- Write .env from Terraform locals ---
     cat > .env <<'EOT'
 ${local.env_file_content}
 EOT
     chmod 600 .env
 
-    # ---- Build images locally (Buildx is present via docker-buildx-plugin) ----
+    # --- Build, migrate, and start the stack ---
     docker compose -f docker-compose.prod.yml build --pull
-
-    # ---- Run DB migrations in a one-off container (doesn't require 'web' to be up) ----
     docker compose -f docker-compose.prod.yml run --rm web python manage.py migrate --noinput
-
-    # ---- Start the stack ----
     docker compose -f docker-compose.prod.yml up -d
-
-    # Optional: if you add a healthcheck to 'web', wait for it here (example shown, commented):
-    # timeout 180 bash -c 'until [ "$(docker inspect -f {{.State.Health.Status}} $(docker ps --filter "name=_web_" --format "{{.ID}}") 2>/dev/null || echo starting)" = "healthy" ]; do sleep 3; done'
   EOF
   )
 }
